@@ -118,4 +118,80 @@ db.books.find({}).sort({ rating: -1 }).skip(2).pretty();
 db.books.find({}, { _id: 0, name: 1, rating: 1, summary: 1 }).pretty();
 
 //combine -operator + projection + sorting
-db.books.find({ rating: { $gt: 8 } }, { _id: 0, name: 1, rating: 1, summary: 1 }).sort({ rating: 1 }).pretty();
+db.books
+  .find({ rating: { $gt: 8 } }, { _id: 0, name: 1, rating: 1, summary: 1 })
+  .sort({ rating: 1 })
+  .pretty();
+
+// sort + projection - id-exclude, name, rating - include, sort -desc, limit -2
+
+db.books
+  .find({}, { _id: 0, name: 1, rating: 1 })
+  .sort({ rating: -1 })
+  .limit(2)
+  .pretty();
+
+//sort by rating in desc and include summary and trailer, skip -(2)
+db.books
+  .find({}, { summary: 1, trailer: 1 })
+  .sort({ rating: -1 })
+  .skip(2)
+  .pretty();
+
+//find only one doc where rating = 8.8
+
+db.books.findOne({ rating: 8.8 });
+
+db.books.find({ rating: 8.8 }).pretty();
+
+//Aggregation
+//Select sum(quantity) from orders where status="urgent"
+//group by productName
+
+db.orders.insertMany([
+  { _id: 0, productName: "Steel Beam", status: "new", quantity: 10 },
+  { _id: 1, productName: "Steel Beam", status: "urgent", quantity: 20 },
+  { _id: 2, productName: "Steel Beam", status: "urgent", quantity: 30 },
+  { _id: 3, productName: "Iron Rod", status: "new", quantity: 15 },
+  { _id: 4, productName: "Iron Rod", status: "urgent", quantity: 50 },
+  { _id: 5, productName: "Iron Rod", status: "urgent", quantity: 10 },
+]);
+
+// stage 1
+// status -urgent
+db.orders.aggregate([{ $match: { status: "urgent" } }]);
+
+//stage 2
+// $match, $group, $sum -  aggregate methods, operators
+db.orders.aggregate([
+  { $match: { status: "urgent" } },
+  {
+    $group: { _id: "$productName", totalUrgentQuantity: { $sum: "$quantity" } },
+  },
+]);
+
+// db.collection.aggregate([{$sum}, {$match}, {$group:{id: "productName", totalSum: {$sum: "quanity"}}}])
+
+// Task
+// 1. update the language for all documents (books)
+
+db.books.updateMany({}, { $set: { language: "English" } });
+// 2. Attitude is everything update rating to 9
+
+db.books.updateOne(
+  { name: "Attitude is everything " },
+  { $set: { language: "Tamil" } }
+);
+
+db.books.updateOne(
+  { name: "Attitude is everything " },
+  { $set: { rating: 9 } }
+);
+
+// 3. Delete all books with rating > 8.6
+
+db.books.find({ rating: { $gt: 8.6 } }, { name: 1, rating: 1 }).pretty();
+
+db.books.deleteOne({ rating: { $gt: 8.6 } });
+
+db.books.deleteMany({ rating: { $gt: 8.6 } });
