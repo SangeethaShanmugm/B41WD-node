@@ -65,3 +65,7 @@ fs.readdir("./backup", (err, data) => {
     });
   });
 });
+
+//Task
+//node fs.js 20  -> 20 files to be created / , file1.html, file2.html, file3.html .... file20.html
+//content - append
