@@ -94,25 +94,38 @@ app.get("/", (req, res) => {
   res.send("Hello Happy Pongal to Everyone🥳🥳🎆🎆🎇🎇");
 });
 
-//books
-app.get("/book", (req, res) => {
-  res.send(books);
-});
+// //books
+// app.get("/book", (req, res) => {
+//   res.send(books);
+// });
 
 //get language
 app.get("/book", (req, res) => {
-  //   const { language } = req.query;
-  console.log(req.query);
-  res.send(books);
-  //   res.send(books.filter((bk) => bk.language == language));
+  const { language, rating } = req.query;
+  console.log(req.query, language);
+  let filteredBooks = books;
+
+  if (language) {
+    filteredBooks = filteredBooks.filter((bk) => bk.language == language);
+  }
+  if (rating) {
+    filteredBooks = filteredBooks.filter((bk) => bk.rating == rating);
+  }
+  res.send(filteredBooks);
 });
 
 //books/id
 app.get("/book/:id", (req, res) => {
   const { id } = req.params;
-  console.log(id);
+  // console.log(id);
   const book = books.find((bk) => bk.id == id);
   res.send(book);
 });
 
 app.listen(PORT, () => console.log("Server started on PORT", PORT));
+
+//Task
+// /book - all the books
+// /book?language=english = only english books
+// /book?language=english&rating=8 = filter by language & rating
+// /book?rating=8 = filter by 8
