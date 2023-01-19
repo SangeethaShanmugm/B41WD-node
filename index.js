@@ -1,4 +1,9 @@
-const express = require("express"); //3rd party package
+// const express = require("express"); //3rd party package
+// const { MongoClient } = require("mongodb");
+
+import express from "express";
+import { MongoClient } from "mongodb";
+
 const app = express();
 const PORT = 8000;
 
@@ -88,6 +93,17 @@ const books = [
   },
 ];
 
+const MONGO_URL = "mongodb://localhost:27017";
+
+async function createConnection() {
+  const client = new MongoClient(MONGO_URL);
+  await client.connect();
+  console.log("Mongo is connected");
+  return client;
+}
+
+const client = await createConnection();
+
 //req - what we send to server(params, queryParams, body)
 //res - what server will send us back
 app.get("/", (req, res) => {
@@ -115,10 +131,15 @@ app.get("/book", (req, res) => {
 });
 
 //books/id
-app.get("/book/:id", (req, res) => {
+app.get("/book/:id", async (req, res) => {
   const { id } = req.params;
   // console.log(id);
-  const book = books.find((bk) => bk.id == id);
+  //db.books.findOne({id: "1"})
+  const book = await client
+    .db("b41wd")
+    .collection("books")
+    .findOne({ id: "12" });
+  // const book = books.find((bk) => bk.id == id);
   res.send(book);
 });
 
