@@ -1,12 +1,13 @@
 // const express = require("express"); //3rd party package
 // const { MongoClient } = require("mongodb");
-
-import express from "express";
+import * as dotenv from "dotenv";
+import express, { request } from "express";
 import { MongoClient } from "mongodb";
 
+dotenv.config();
+// console.log(process.env.MONGO_URL);
 const app = express();
-const PORT = 8000;
-
+const PORT = process.env.PORT;
 // const books = [
 //   {
 //     id: 1,
@@ -92,8 +93,8 @@ const PORT = 8000;
 //     language: "Tamil",
 //   },
 // ];
-
-const MONGO_URL = "mongodb://localhost:27017";
+// "mongodb://localhost:27017";
+const MONGO_URL = process.env.MONGO_URL;
 
 async function createConnection() {
   const client = new MongoClient(MONGO_URL);
@@ -103,7 +104,8 @@ async function createConnection() {
 }
 
 const client = await createConnection();
-
+//interceptor || converting body to json
+app.use(express.json());
 //req - what we send to server(params, queryParams, body)
 //res - what server will send us back
 app.get("/", (req, res) => {
@@ -140,16 +142,27 @@ app.get("/book", async (req, res) => {
 });
 
 //books/id
-app.delete("/book/:id", async (req, res) => {
+app.get("/book/:id", async (req, res) => {
   const { id } = req.params;
   // console.log(id);
   //db.books.findOne({id: "1"})
-  const book = await client
+  const book = await client.db("b41wd").collection("books").findOne({ id: id });
+  // const book = books.find((bk) => bk.id == id);
+  console.log(book);
+  book ? res.send(book) : res.status(404).send({ message: "No book found" });
+});
+
+//POST book
+//inbuilt middleware
+//say data is in json
+app.post("/book", async (req, res) => {
+  const newBook = req.body;
+  console.log(newBook);
+  const result = await client
     .db("b41wd")
     .collection("books")
-    .deleteOne({ id: id });
-  // const book = books.find((bk) => bk.id == id);
-  res.send(book);
+    .insertMany(newBook);
+  res.send(result);
 });
 
 app.listen(PORT, () => console.log("Server started on PORT", PORT));
@@ -159,3 +172,8 @@ app.listen(PORT, () => console.log("Server started on PORT", PORT));
 // /book?language=english = only english books
 // /book?language=english&rating=8 = filter by language & rating
 // /book?rating=8 = filter by 8
+
+//CREATE - POST
+//READ - GET ✅
+//UPDATE - PUT
+//DELETE - DELETE ✅
