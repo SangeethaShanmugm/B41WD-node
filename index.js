@@ -1,8 +1,9 @@
 // const express = require("express"); //3rd party package
 // const { MongoClient } = require("mongodb");
 import * as dotenv from "dotenv";
-import express, { request } from "express";
+import express from "express";
 import { MongoClient } from "mongodb";
+import { bookRouter } from "./routes/book.js";
 
 dotenv.config();
 // console.log(process.env.MONGO_URL);
@@ -103,7 +104,7 @@ async function createConnection() {
   return client;
 }
 
-const client = await createConnection();
+export const client = await createConnection();
 //interceptor || converting body to json
 app.use(express.json());
 //req - what we send to server(params, queryParams, body)
@@ -112,68 +113,8 @@ app.get("/", (req, res) => {
   res.send("Hello Everyone🥳🥳🎆🎆🎇🎇");
 });
 
-// //books
-// app.get("/book", (req, res) => {
-//   res.send(books);
-// });
-
-//get language
-app.get("/book", async (req, res) => {
-  const { language, rating } = req.query;
-  console.log(req.query, language);
-  // let filteredBooks = books;
-
-  // if (language) {
-  //   filteredBooks = filteredBooks.filter((bk) => bk.language == language);
-  // }
-  // if (rating) {
-  //   filteredBooks = filteredBooks.filter((bk) => bk.rating == rating);
-  // }
-  if (req.query.rating) {
-    req.query.rating = +req.query.rating;
-  }
-  console.log(req.query);
-  const book = await client
-    .db("b41wd")
-    .collection("books")
-    .find(req.query)
-    .toArray();
-  res.send(book);
-});
-
-//books/id
-app.get("/book/:id", async (req, res) => {
-  const { id } = req.params;
-  // console.log(id);
-  //db.books.findOne({id: "1"})
-  const book = await client.db("b41wd").collection("books").findOne({ id: id });
-  // const book = books.find((bk) => bk.id == id);
-  console.log(book);
-  book ? res.send(book) : res.status(404).send({ message: "No book found" });
-});
-
-//POST book
-//inbuilt middleware
-//say data is in json
-app.post("/book", async (req, res) => {
-  const newBook = req.body;
-  console.log(newBook);
-  const result = await client
-    .db("b41wd")
-    .collection("books")
-    .insertMany(newBook);
-  res.send(result);
-});
+app.use("/book", bookRouter);
 
 app.listen(PORT, () => console.log("Server started on PORT", PORT));
 
-//Task
-// /book - all the books
-// /book?language=english = only english books
-// /book?language=english&rating=8 = filter by language & rating
-// /book?rating=8 = filter by 8
 
-//CREATE - POST
-//READ - GET ✅
-//UPDATE - PUT
-//DELETE - DELETE ✅

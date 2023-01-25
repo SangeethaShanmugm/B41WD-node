@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "name": "Charlotte's web  Charlotte's ",
+    "poster": "https://cdn.britannica.com/64/103064-050-295C6879/Charlottes-Web-EB-Garth-Williams.jpg",
+    "rating": 8.8,
+    "trailer": "https://www.youtube.com/embed/PU2r9tDwZ1M",
+    "summary": "The novel tells the story of a livestock pig named Wilbur and his friendship with a barn spider named Charlotte. When Wilbur is in danger of being slaughtered by the farmer, Charlotte writes messages praising Wilbur in her web in order to persuade the farmer to let him live.",
+    "language": "english"
+  },
+  {
+    "id": 2,
+    "name": "Attitude is everything ",
+    "poster": "https://miro.medium.com/max/1400/1*ItFOYfi8Dyy0yj9n1SE8uQ.jpeg",
+    "rating": 8.1,
+    "trailer": "https://www.youtube.com/embed/gqviJoSkf6U",
+    "summary": "Attitude, In psychology, a mental position with regard to a fact or state. Attitudes reflect a tendency to classify objects and events and to react to them with some consistency. Attitudes are not directly observable but rather are inferred from the objective, evaluative responses a person makes.",
+    "language": "english"
+  },
+  {
+    "id": 3,
+    "name": "The Secret",
+    "poster": "https://m.media-amazon.com/images/I/81fdQIY6ykL.jpg",
+    "rating": 8.8,
+    "trailer": "https://www.youtube.com/embed/san61qTwWsU",
+    "summary": "There's no secret to The Secret. The book and movie simply state that your thoughts control the universe. Through this “law of attraction” you “manifest” your desires. “It is exactly like placing an order from a catalogue",
+    "language": "english"
+  }
+]
