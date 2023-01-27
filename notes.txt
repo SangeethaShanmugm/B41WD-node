@@ -1,0 +1,3 @@
+MONGO_URL=mongodb+srv://sangeetha:yTjoXOoAnAEf9z57@cluster0.09bk9ld.mongodb.net
+PORT=8000
+SECRET_KEY=my_secret_key
