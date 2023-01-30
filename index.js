@@ -1,14 +1,17 @@
 // const express = require("express"); //3rd party package
 // const { MongoClient } = require("mongodb");
+import cors from "cors";
 import * as dotenv from "dotenv";
 import express from "express";
+import bcrypt from "bcrypt";
 import { MongoClient } from "mongodb";
 import { bookRouter } from "./routes/book.js";
-import bcrypt from "bcrypt";
 import { usersRouter } from "./routes/user.js";
+
 dotenv.config();
 // console.log(process.env.MONGO_URL);
 const app = express();
+app.use(cors());
 const PORT = process.env.PORT;
 // const books = [
 //   {
@@ -119,4 +122,3 @@ app.use("/book", bookRouter);
 app.use("/user", usersRouter);
 
 app.listen(PORT, () => console.log("Server started on PORT", PORT));
-
